@@ -1,33 +1,34 @@
 from flask import Flask, request, jsonify
 import joblib
+import numpy as np
 import os
-from pathlib import Path
 
 app = Flask(__name__)
-MODEL_PATH = Path("artifacts/model.pkl")
 
-if not MODEL_PATH.exists():
-    # convenience: train if model missing
-    import train as _train
-    _train.main()
+@app.route('/')
+def home():
+    return {"message": "Hello-World MLOps API", "endpoints": ["/predict"]}
 
-model = joblib.load(MODEL_PATH)
-
-@app.route("/health", methods=["GET"])
-def health():
-    return jsonify({"status": "ok"})
-
-@app.route("/predict", methods=["POST"])
+@app.route('/predict', methods=['POST'])
 def predict():
-    data = request.get_json()
-    if not data or "features" not in data:
-        return jsonify({"error": "send JSON with key 'features'"}), 400
-    features = data["features"]
     try:
-        pred = model.predict([features])
-        return jsonify({"prediction": int(pred[0])})
+        data = request.get_json()
+        features = np.array(data['features']).reshape(1, -1)
+        
+        # Load model
+        model_path = 'artifacts/model.pkl'
+        if not os.path.exists(model_path):
+            return jsonify({"error": "Model not found. Run 'python train.py' first"}), 404
+            
+        model = joblib.load(model_path)
+        prediction = model.predict(features)[0]
+        
+        return jsonify({
+            "prediction": int(prediction),
+            "features": data['features']
+        })
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e)}), 400
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
