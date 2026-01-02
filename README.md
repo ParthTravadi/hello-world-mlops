@@ -1,7 +1,6 @@
 # hello-world-mlops
 
 What's Planned:
-#	Section	Coverage
 1	Project Overview	Architecture, live demo
 2	Step-by-Step Implementation	7-step local setup
 3	Production Checklist	15-item verification
@@ -15,10 +14,10 @@ What's Planned:
 11	Feature Store (Feast)	Feature definitions + integration
 
 🎯 How to Use:
-# 1. Download the file
-# 2. Copy content
-# 3. Create README.md in your repo root
-# 4. git add README.md && git commit && git push
+1. Download the file
+2. Copy content
+3. Create README.md in your repo root
+4. git add README.md && git commit && git push
 
 ✨ Highlights:
 ✅ Real troubleshooting from actual errors
