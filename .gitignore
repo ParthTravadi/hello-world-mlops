@@ -1,2 +1,7 @@
 # Python virtual environment
 .venv/
+source/bin/
+source/lib/
+source/lib64/
+source/pyvenv.cfg
+
